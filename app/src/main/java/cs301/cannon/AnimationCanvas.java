@@ -18,6 +18,7 @@ import android.graphics.BitmapFactory;
  * 
  * @author Steve Vegdahl
  * @author Andrew Nuxoll
+ * @author Daniel Rothschilds
  * @version September 2012
  * 
  * 
