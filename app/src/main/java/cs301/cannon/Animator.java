@@ -65,6 +65,7 @@ public interface Animator {
 	public void reloadAndFire(double velocity, double theta, double gravity);
 	public void reset();
 
+
 	/**
 	 * Called whenever the user touches the AnimationCanvas so that the
 	 * animation can respond to the event.

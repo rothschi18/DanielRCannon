@@ -1,22 +1,22 @@
 package cs301.cannon;
 
-import android.graphics.*;
-import android.util.Log;
+
 import android.view.MotionEvent;
-
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.view.MotionEvent;
-import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
-import java.util.Random;
-
-import cs301.cannon.Animator;
-
+/**
+ * A Cannon which fires and calculates the position of its shot
+ *
+ *
+ *
+ * @author Daniel Rothschilds
+ * @version November 1 2015
+ *
+ *
+ */
 public class Cannon implements Animator {
 
     // instance variables
@@ -30,7 +30,7 @@ public class Cannon implements Animator {
     int startY = 1200;                      //Initial starting y
     //Set a default ball w/ angle pi/4 and normal gravity
     public static Ball shot = new Ball(100, 0, 50, 3.1415/4, 9.81/5);
-
+    //X and Y variables for Targets
     private int x1;
     private int x2;
     private int x3;
@@ -67,19 +67,18 @@ public class Cannon implements Animator {
         Paint blackPaint = new Paint();
         blackPaint.setColor(Color.BLACK);
 
-        Random rand = new Random();
-        int x1 = rand.nextInt(1500 - 200 + 1) + 200;
-        int x2 = rand.nextInt(1500 - 200 + 1) + 200;
-        int x3 = rand.nextInt(1500 - 200 + 1) + 200;
 
-        int y1 = rand.nextInt(1000 + 1);
-        int y1 = rand.nextInt(1000 + 1);
-        int y1 = rand.nextInt(1000 + 1);
-        g.drawCircle(x, 100, 100, blackPaint);
+        x1 = 1500;
+        x2 = 700;
+        x3 = 1200;
 
-        g.drawCircle(x, 100, 100,blackPaint);
-        g.drawCircle(x, 300, 50, blackPaint);
-        g.drawCircle(1200, 700, 25, blackPaint);
+        y1 = 100;
+        y2 = 300;
+        y3 = 700;
+        g.drawCircle(x1, y1, 100, blackPaint);
+        g.drawCircle(x2, y2, 50,blackPaint);
+        g.drawCircle(x3, y3, 25, blackPaint);
+
     }
 
 
@@ -90,40 +89,38 @@ public class Cannon implements Animator {
      */
     public void tick(Canvas g) {
         //Draw the targets to shoot at
-        if(!isDrawn)
+
             drawTargets(g);
 
-        drawCannon(g);
 
 
-        //draw the cannon
 
         //define the paint to use
         Paint redPaint = new Paint();
         redPaint.setColor(Color.RED);
-        // bump our count either up or down by one, depending on whether
-        // we are in "backwards mode".
+        //if we can fire then proceed
         if(reloadAndFire) {
             count++;
 
-
+            //calculate the x and y coordinates of the ball
             int x = (int) (shot.getxVelocity() * Math.cos(shot.getTheta()) * count) + startX;
             int y = -(int) (shot.getVelocity() * Math.sin(shot.getTheta()) * count) + (int) (.5 * shot.getGravity() * count * count) + startY;
             shot.setX(x);
             shot.setY(y);
-
-
-
+            //set the values
             g.drawCircle(shot.getX(), shot.getY(), 20, redPaint);
         }
-        //If the shot is outside of the desired boundaries clear the shot from the screen and mark that we are reloading
+        //if it hits the ground, bounce
+         /*
         if(shot.getY()>1240){
+            //restart the time with the balls x value so it will bounce
             count = 0;
             startX = shot.getX();
-            startY = shot.getY();
             shot.setVelocity(shot.getVelocity()/1.2);
             isFlying = true;
         }
+        */
+        //If the shot is outside of the desired boundaries clear the shot from the screen and mark that we are reloading
         if(shot.getX()> 1800)
         {
             isFlying = false;
@@ -134,20 +131,18 @@ public class Cannon implements Animator {
             startX = 150;
             startY = 1200;
         }
-        // g.drawCircle(1500, 100, 100,blackPaint);
-        //g.drawCircle(700, 300, 50, blackPaint);
-        //g.drawCircle(1200, 700, 25, blackPaint);
-        if (shot.getX()> 1400 && shot.getX() < 1600 && shot.getY()>0 && shot.getY() < 200) {
+
+        //If the ball hits any of the targets, increment score and reset the ball and count
+        if (shot.getX()> x1-100 && shot.getX() < x1+100 && shot.getY()>y1-100 && shot.getY() < y1+100) {
             score += 1;
             shot.setY(0);
             shot.setX(0);
             count = 0;
             reloadAndFire = false;
             isFlying = false;
-            Paint white = new Paint(Color.rgb(180, 200, 255));
-            g.drawCircle(1500, 100, 100,blackPaint);
+
         }
-        if (shot.getX()> 650 && shot.getX() < 750 && shot.getY()>250 && shot.getY() < 350) {
+        if (shot.getX()> x2-50 && shot.getX() < x2+50 && shot.getY()>y2-50 && shot.getY() < y2+50) {
             score += 1;
             shot.setY(0);
             shot.setX(0);
@@ -155,7 +150,7 @@ public class Cannon implements Animator {
             reloadAndFire = false;
             isFlying = false;
         }
-        if (shot.getX()> 1175 && shot.getX() < 1225 && shot.getY()>675 && shot.getY() < 725) {
+        if (shot.getX()> x3-25 && shot.getX() < x3+25 && shot.getY()>y3-25 && shot.getY() < y3+25) {
             score += 1;
             shot.setY(0);
             shot.setX(0);
@@ -164,24 +159,20 @@ public class Cannon implements Animator {
             isFlying = false;
         }
 
-
+        //Paint the score onto the screen
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
         paint.setTextSize(50);
         g.drawText("Score = " + score, 200, 50, paint);
-        g.drawLine(0, 1250, 1800, 1250, paint);
-
-    }
-
-    private void drawCannon(Canvas g) {
-        Paint blackPaint = new Paint();
-        blackPaint.setColor(Color.BLACK);
-
 
 
     }
 
+
+/*
+* Method allows a person to shoot a ball as long as there isnt one already in flight
+ */
     @Override
     public void reloadAndFire(double velocity, double theta, double gravity) {
         if(!isFlying){
@@ -191,7 +182,9 @@ public class Cannon implements Animator {
             reloadAndFire = true;
         }
     }
-
+    /*
+    Reset method clears the ball and moves it back to the beginning
+     */
     public void reset(){
         isFlying = false;
         reloadAndFire = false;
@@ -234,4 +227,3 @@ public class Cannon implements Animator {
 
 
 }//class TextAnimator
-

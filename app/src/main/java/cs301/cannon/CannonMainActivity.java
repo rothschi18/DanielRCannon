@@ -1,5 +1,7 @@
 package cs301.cannon;
 
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -46,9 +48,10 @@ public class CannonMainActivity extends Activity {
 
 
 
+
 	}
 	/**
-	 * This method will fire a shot at the designated angle and velocity
+	 * This method will fire a shot at the designated angle and velocity NEED SOUND
 	 */
 
 	public void fire(View view)
@@ -66,13 +69,15 @@ public class CannonMainActivity extends Activity {
 		if(gravity<0)
 			gravity = 1.962;
 
-		if(velocity < 0)
+		if (velocity < 0)
 			velocity = 100;
 
 		cannon.reloadAndFire(velocity, theta*3.1415/180, gravity);
 
 	}
 
+
+//when user clicks reset, will call cannon reset to reset shot
 	public void reset(View view)
 	{
 			cannon.reset();
