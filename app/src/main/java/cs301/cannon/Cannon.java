@@ -110,6 +110,17 @@ public class Cannon implements Animator {
             //set the values
             g.drawCircle(shot.getX(), shot.getY(), 20, redPaint);
         }
+        //*******************************************************
+        /*
+        NOTE TO GRADER:
+        Uncomenting the following code will allow the ball to bounce of the ground, testing should be fairly straightforward
+
+
+         */
+
+
+
+        //*******************************************************
         //if it hits the ground, bounce
          /*
         if(shot.getY()>1240){
